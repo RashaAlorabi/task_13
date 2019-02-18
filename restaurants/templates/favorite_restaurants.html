@@ -6,19 +6,19 @@
 <br>
 
 <div class="row">
-    {% for restaurant in favorite_list_user %}
+    {% for fav in favs %}
     <div class="col-md-4">
         <div class="card my-card">
-          {% if restaurant.logo %}
-            <img class="card-img-top" src="{{restaurant.logo.url}}" alt="Hey Noob, look at me...">
+          {% if fav.restaurant.logo %}
+            <img class="card-img-top" src="{{fav.restaurant.logo.url}}" alt="Hey Noob, look at me...">
           {% endif %}
           <div class="card-body">
-            <h5 class="card-title">{{restaurant.name}}</h5>
-            <p class="card-text">{{restaurant.description|truncatechars:25}}</p>
+            <h5 class="card-title">{{fav.restaurant.name}}</h5>
+            <p class="card-text">{{fav.restaurant.description|truncatechars:25}}</p>
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item text-center">
-                <a href="{% url 'restaurant-detail' restaurant.id %}" class="btn btn-outline-dark">View</a>
+                <a href="{% url 'restaurant-detail' fav.restaurant.id %}" class="btn btn-outline-dark">View</a>
             </li>
           </ul>
         </div>

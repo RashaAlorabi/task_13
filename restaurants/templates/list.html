@@ -23,7 +23,7 @@
 
             <h5 class="card-title"> 
 
-              <button id = "{{restaurant.id}}"class="btn btn-light{% if restaurant.id in liked_restaurant %} text-danger{% endif %}"onClick="like_me({{restaurant.id}})"><i class="fas fa-heart"></i>
+              <button id = "{{restaurant.id}}"class="btn btn-outline-secondary{% if restaurant.id in favorite_restaurants %} text-danger{% endif %}"onClick="like_me({{restaurant.id}})"><i class="fas fa-star"></i>
               </button>
 
             </h5>
@@ -51,7 +51,7 @@
                console.log('error');
             },
             success:function(data){ 
-              if(data.like){
+              if(data.favorite){
                 $(button_id).addClass('text-danger')
               }else{
                  $(button_id).removeClass('text-danger')   

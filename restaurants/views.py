@@ -8,15 +8,15 @@ from django.http import JsonResponse
 # This view will be used to favorite a restaurant
 def restaurant_favorite(request, restaurant_id):
     restaurant = Restaurant.objects.get(id=restaurant_id)
-    like_obj , create = FavoriteRestaurant.objects.get_or_create(user=request.user,restaurant=restaurant)
-    if create:
-        like = True
+    fav_obj , created = FavoriteRestaurant.objects.get_or_create(user=request.user,restaurant=restaurant)
+    if created:
+        favorite = True
     else:
-        like = False
-        like_obj.delete()
+        favorite = False
+        fav_obj.delete()
 
     data={
-    'like':like,
+    'favorite':favorite,
     }    
     return JsonResponse(data)
 
@@ -25,14 +25,10 @@ def restaurant_favorite(request, restaurant_id):
 def favorite_restaurants(request):
     if request.user.is_anonymous:
         return redirect('signin')
-    favorite_list_user =[]
-    favorite_list = FavoriteRestaurant.objects.filter(user=request.user).values_list('restaurant_id',flat=True)
-    for x in favorite_list:
-        restaurant = Restaurant.objects.get(id=x)
-        favorite_list_user.append(restaurant)
+    favs= request.user.favs.all()
+    
     context = {
-        "favorite_list_user":favorite_list_user
-
+        "favs":favs,
     }
     return render(request, 'favorite_restaurants.html', context)
 
@@ -93,10 +89,13 @@ def restaurant_list(request):
             Q(owner__username__icontains=query)
         ).distinct()
         #############
-    liked_restaurant = FavoriteRestaurant.objects.filter(user=request.user).values_list('restaurant_id',flat=True)
+    favorite_restaurants = []
+    if request.user.is_authenticated:
+        favorite_restaurants = request.user.favs.all().values_list('restaurant', flat=True)
+
     context = {
        "restaurants": restaurants,
-       'liked_restaurant':liked_restaurant,
+       'favorite_restaurants':favorite_restaurants,
     }
     return render(request, 'list.html', context)
 
