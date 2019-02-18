@@ -20,7 +20,15 @@
             <img class="card-img-top" src="{{restaurant.logo.url}}" alt="Hey Noob, look at me...">
           {% endif %}
           <div class="card-body">
+
+            <h5 class="card-title"> 
+
+              <button id = "{{restaurant.id}}"class="btn btn-light{% if restaurant.id in liked_restaurant %} text-danger{% endif %}"onClick="like_me({{restaurant.id}})"><i class="fas fa-heart"></i>
+              </button>
+
+            </h5>
             <h5 class="card-title">{{restaurant.name}}</h5>
+
             <p class="card-text">{{restaurant.description|truncatechars:25}}</p>
           </div>
           <ul class="list-group list-group-flush">
@@ -32,5 +40,27 @@
     </div>
     {% endfor %}
 </div>
+<script>
+  function like_me(id){
+    let button_id = "#"+id;
+    $.ajax(
+    {
+            type:'GET',
+            url: '/restaurants/'+id+'/favorite/',
+            error:function(){
+               console.log('error');
+            },
+            success:function(data){ 
+              if(data.like){
+                $(button_id).addClass('text-danger')
+              }else{
+                 $(button_id).removeClass('text-danger')   
+               }
+              },
+            
+        }
+    );
+}
+</script>
 {% endblock content %}
 
