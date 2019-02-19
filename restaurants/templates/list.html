@@ -20,13 +20,6 @@
             <img class="card-img-top" src="{{restaurant.logo.url}}" alt="Hey Noob, look at me...">
           {% endif %}
           <div class="card-body">
-
-            <h5 class="card-title"> 
-
-              <button id = "{{restaurant.id}}"class="btn btn-outline-secondary{% if restaurant.id in favorite_restaurants %} text-danger{% endif %}"onClick="like_me({{restaurant.id}})"><i class="fas fa-star"></i>
-              </button>
-
-            </h5>
             <h5 class="card-title">{{restaurant.name}}</h5>
 
             <p class="card-text">{{restaurant.description|truncatechars:25}}</p>
@@ -35,13 +28,19 @@
             <li class="list-group-item text-center">
                 <a href="{% url 'restaurant-detail' restaurant.id %}" class="btn btn-outline-dark">View</a>
             </li>
+
+            <li class="list-group-item text-center">
+                <button id = "{{restaurant.id}}"class="btn btn-outline-secondary{% if restaurant.id in favorite_restaurants %} text-warning{% endif %}"onClick="fav_me({{restaurant.id}})"><i class="fas fa-star"></i>
+              </button>
+            </li>
+            
           </ul>
         </div>
     </div>
     {% endfor %}
 </div>
 <script>
-  function like_me(id){
+  function fav_me(id){
     let button_id = "#"+id;
     $.ajax(
     {
@@ -52,9 +51,9 @@
             },
             success:function(data){ 
               if(data.favorite){
-                $(button_id).addClass('text-danger')
+                $(button_id).addClass('text-warning')
               }else{
-                 $(button_id).removeClass('text-danger')   
+                 $(button_id).removeClass('text-warning')   
                }
               },
             
